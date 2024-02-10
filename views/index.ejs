@@ -1,24 +1,24 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Names List 2</title>
+    <title>Names List</title>
   </head>
   <body>
-    <h1>Add a Name 2</h1>
-    <input
-      type="text"
-      id="name"
-      name="name"
-      placeholder="Enter a name here"
-      ondblclick="sendName()"
-    />
-    <button onclick="sendName()">Submit</button>
+    <h1>Add a Name</h1>
+    <form action="/add-name" method="POST">
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="Enter a name here"
+      />
+      <button type="submit">Submit</button>
+    </form>
     <div id="namesList">
-      <%= namelist %>
-    </div>
+      <ul>
+        <%- namelist %>
+      </ul>
     </div>
   </body>
 </html>

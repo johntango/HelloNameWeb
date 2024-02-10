@@ -8,24 +8,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //let ejs = require('ejs');
 const port = 3001;
 
+app.use(express.static('./views'));
 // serve from public
 // Set the view engine to ejs
 app.set('view engine', 'ejs');
+app.set('views', './views');
 
 let names = ['Fred']; // Array to store names
 
 app.get('/', (req, res) => {
   let namelist = "";
   if (names.length > 0) {
-    namelist = '<ul>';
     names.map((name) => {
       namelist += `<li>${name}</li>`;
     });
-    namelist += '</ul>';
   }
-
   // Render the index.ejs template and pass the namelist as a variable
-  ejs.renderFile( path.join(__dirname, './views', 'index.ejs'), { namelist: namelist });
+  res.render('index', { namelist: namelist });
+  //ejs.renderFile( path.join(__dirname, './views', 'index.ejs'), { namelist: namelist });
 });
 
 app.post('/add-name', (req, res) => {
