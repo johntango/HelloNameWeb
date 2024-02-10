@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Names List 2</title>
+  </head>
+  <body>
+    <h1>Add a Name 2</h1>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      placeholder="Enter a name here"
+      ondblclick="sendName()"
+    />
+    <button onclick="sendName()">Submit</button>
+    <div id="namesList">
+      <h2>Names</h2>
+      <ul id="names"></ul>
+    </div>
+
+    <script>
+      function sendName() {
+        const nameInput = document.getElementById("name");
+        const name = nameInput.value;
+
+        if (!name) {
+          alert("Please enter a name.");
+          return;
+        }
+
+        // Use fetch to send a POST request to "/add-name"
+        fetch("/add-name", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `name=${encodeURIComponent(name)}`,
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.text();
+            }
+            throw new Error("Network response was not ok.");
+          })
+          .then(() => {
+            nameInput.value = ""; // Clear the input after successful submission
+            fetchNames(); // Fetch and update the list of names
+          })
+          .catch((error) =>
+            console.error(
+              "There was a problem with the fetch operation:",
+              error
+            )
+          );
+      }
+
+      // Function to fetch and display names
+      function fetchNames() {
+        fetch("/names")
+          .then((response) => response.json())
+          .then((namesArray) => {
+            const namesList = document.getElementById("names");
+            namesList.innerHTML = ""; // Clear the list before adding new names
+            namesArray.forEach((name) => {
+              const listItem = document.createElement("li");
+              listItem.textContent = name;
+              namesList.appendChild(listItem);
+            });
+          })
+          .catch((error) => console.error("Error fetching names:", error));
+      }
+
+      // Call fetchNames on page load to display the current list of names
+      window.onload = fetchNames;
+    </script>
+  </body>
+</html>
